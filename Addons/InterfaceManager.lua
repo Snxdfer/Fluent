@@ -107,6 +107,56 @@ local InterfaceManager = {} do
 			Settings.MenuKeybind = MenuKeybind.Value
             InterfaceManager:SaveSettings()
 		end)
+
+while not game:IsLoaded() or not game:GetService("CoreGui") or not game:GetService("Players").LocalPlayer or not game:GetService("Players").LocalPlayer:FindFirstChild("PlayerGui") do
+    wait()
+end
+
+local player = game:GetService("Players").LocalPlayer
+local mouse = player:GetMouse()
+
+local defaultCursor = mouse.Icon
+
+local cursorAssets = {
+    ["White Dot"] = "rbxassetid://417446600",
+    ["Rodin"] = "rbxassetid://985035074",
+    ["Green Dot"]= "rbxassetid://973825151",
+}
+
+local Toggle = Tabs.Main:AddToggle("enableCustomCursor", {Title = "Enable Custom Cursor", Default = false})
+
+local Dropdown = Tabs.Main:AddDropdown("CursorsDropdown", {
+    Title = "Cursors",
+    Values = {"White Dot", "Rodin", "Green Dot"},
+    Multi = false,
+    Default = nil,
+})
+
+local function updateCursor()
+    if Toggle.Value then
+        local selection = Dropdown.Value
+        if selection and cursorAssets[selection] then
+            mouse.Icon = cursorAssets[selection]
+        else
+            mouse.Icon = cursorAssets["White Dot"]
+        end
+    else
+        mouse.Icon = defaultCursor
+    end
+end
+
+Toggle:OnChanged(function(newValue)
+    if newValue then
+        updateCursor()
+    else
+        mouse.Icon = defaultCursor
+    end
+end)
+
+Dropdown:OnChanged(function(newValue)
+    updateCursor()
+end)
+
 		Library.MinimizeKeybind = MenuKeybind
     end
 end

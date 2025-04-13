@@ -1,14 +1,5 @@
---// fix2
 local httpService = game:GetService("HttpService")
-local LP = game:GetService("Players").LocalPlayer
-local mouse = LP:GetMouse()
-local defaultCursor = mouse.Icon
-local cursorAssets = {
-	["White Dot"] = "rbxassetid://417446600",
-	["Rodin"]     = "rbxassetid://985035074",
-	["Green Dot"] = "rbxassetid://973825151"
-}
-
+ 
  local InterfaceManager = {} do
  	InterfaceManager.Folder = "FluentSettings"
      InterfaceManager.Settings = {
@@ -70,21 +61,6 @@ local cursorAssets = {
          local Settings = InterfaceManager.Settings
  
          InterfaceManager:LoadSettings()
-
-		 local function updateCursor()
-            if enableCustomCursor.Value then
-                local selection = CursorsDropdown.Value
-                if selection and cursorAssets[selection] then
-                    mouse.Icon = cursorAssets[selection]
-                else
-                    mouse.Icon = cursorAssets["White Dot"]
-                end
-            else
-                mouse.Icon = defaultCursor
-            end
-        end
-
-        updateCursor()
  
  		local section = tab:AddSection("Interface")
  
@@ -125,24 +101,6 @@ local cursorAssets = {
                  InterfaceManager:SaveSettings()
  			end
  		})
-
-		section:AddToggle("enableCustomCursor", {
-            Title = "Enable Custom Cursor",
-            Default = false,
-            Callback = function(Value)
-                updateCursor()
-            end
-        })
-
-		section:AddDropdown("CursorsDropdown", {
-            Title = "Cursors",
-            Values = {"White Dot", "Rodin", "Green Dot"},
-            Multi = false,
-            Default = nil,
-            Callback = function(Value)
-                updateCursor()
-            end
-        })
  	
  		local MenuKeybind = section:AddKeybind("MenuKeybind", { Title = "Minimize Bind", Default = Settings.MenuKeybind })
  		MenuKeybind:OnChanged(function()
